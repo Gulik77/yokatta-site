@@ -243,8 +243,43 @@
       }
 
       @media (max-width: 900px) {
+        .page {
+          padding: 24px 18px 56px;
+        }
+
+        .page-header {
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .brand {
+          font-size: 28px;
+        }
+
+        .title {
+          font-size: 24px;
+        }
+
         .grid {
           grid-template-columns: 1fr;
+        }
+
+        .card {
+          padding: 18px;
+        }
+
+        .button {
+          width: 100%;
+        }
+
+        .admin-actions {
+          flex-direction: column;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .toggle-visibility {
+          right: 6px;
         }
       }
     </style>
@@ -380,7 +415,7 @@
       const SUPABASE_URL = "https://kbguphxloslhdcpbxqub.supabase.co";
       const SUPABASE_KEY = "sb_publishable__Ve_OcWmEs8Hpns4PA-Teg_6gb7S-iO";
       const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      const ADMIN_EMAIL = "your@email.com";
+      const ADMIN_EMAIL = "d.milana1117@gmail.com";
 
       const translations = {
         en: {

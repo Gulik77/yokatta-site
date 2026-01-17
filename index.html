@@ -768,6 +768,117 @@
         padding: 6px 12px;
         border-radius: 999px;
       }
+
+      @media (max-width: 900px) {
+        .logo-button {
+          top: 16px;
+          left: 16px;
+        }
+
+        .menu-drawer {
+          width: min(320px, 88vw);
+        }
+
+        .menu-title {
+          font-size: 30px;
+        }
+
+        .title {
+          left: 50%;
+          font-size: clamp(70px, 18vw, 170px);
+        }
+
+        .subtitle {
+          left: 50%;
+          top: 60%;
+          transform: translateX(-50%);
+          font-size: clamp(32px, 7vw, 90px);
+        }
+
+        .stage {
+          height: 56vh;
+        }
+
+        .story {
+          padding: 80px 20px 90px;
+        }
+
+        .section-block {
+          padding: 70px 20px;
+        }
+
+        .block-label {
+          text-align: center;
+        }
+
+        .categories,
+        .showcase {
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+
+        .category-rect,
+        .showcase-rect {
+          height: clamp(220px, 62vw, 320px);
+        }
+
+        .features {
+          max-width: 100%;
+          text-align: center;
+        }
+
+        .features-list {
+          justify-items: center;
+        }
+
+        .features-item {
+          grid-template-columns: 10px 1fr;
+          max-width: 420px;
+          text-align: left;
+        }
+
+        .footer-top {
+          grid-template-columns: 1fr;
+          text-align: center;
+          justify-items: center;
+        }
+
+        .footer-links {
+          justify-content: center;
+        }
+
+        .footer-contact {
+          justify-items: center;
+          text-align: center;
+        }
+
+        .site-footer {
+          padding: 60px 20px 32px;
+        }
+
+        .hint {
+          bottom: 16px;
+          font-size: 12px;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .title {
+          font-size: clamp(56px, 20vw, 140px);
+        }
+
+        .subtitle {
+          top: 62%;
+        }
+
+        .stage {
+          height: 52vh;
+        }
+
+        .menu-drawer {
+          width: 100%;
+        }
+      }
     </style>
   </head>
   <body>

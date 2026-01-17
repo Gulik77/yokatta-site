@@ -228,8 +228,44 @@
       }
 
       @media (max-width: 900px) {
+        .page {
+          padding: 24px 18px 56px;
+        }
+
+        .page-header {
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .brand {
+          font-size: 28px;
+        }
+
         .cart-grid {
           grid-template-columns: 1fr;
+        }
+
+        .summary {
+          order: 2;
+        }
+
+        .cart-item {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+
+        .cart-item img {
+          max-width: 160px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .item-row {
+          gap: 10px;
+        }
+
+        .checkout {
+          width: 100%;
         }
       }
     </style>

@@ -323,6 +323,58 @@
         text-decoration: none;
       }
 
+      @media (max-width: 900px) {
+        .page {
+          padding: 24px 18px 60px;
+        }
+
+        .page-header {
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .brand {
+          font-size: 28px;
+        }
+
+        .product {
+          grid-template-columns: 1fr;
+        }
+
+        .actions {
+          flex-wrap: wrap;
+        }
+
+        .add {
+          flex: 1;
+          min-width: 160px;
+        }
+
+        .wish {
+          width: 44px;
+          height: 44px;
+        }
+
+        .grid {
+          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        }
+
+        .similar-title {
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .gallery-arrow {
+          width: 30px;
+          height: 30px;
+        }
+
+        .title {
+          font-size: 24px;
+        }
+      }
+
       .card:hover {
         transform: translateY(-4px);
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
