@@ -101,10 +101,33 @@ const renderProducts = (products) => {
   });
 };
 
+const filterBySearch = (products, query) => {
+  if (!query) return products;
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return products;
+  return products.filter((product) => {
+    const haystack = [
+      product.name,
+      product.model,
+      product.category,
+      product.color,
+      product.material,
+      product.style,
+      product.fit,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    return haystack.includes(normalized);
+  });
+};
+
 const initCatalog = () => {
   if (!window.CATALOG_DATA) return;
   const products = window.CATALOG_DATA.products || [];
-  renderProducts(products);
+  const query = new URLSearchParams(window.location.search).get("q") || "";
+  const baseProducts = filterBySearch(products, query);
+  renderProducts(baseProducts);
 
   const filterButton = document.getElementById("filterButton");
   const filterDrawer = document.getElementById("filterDrawer");
@@ -135,7 +158,7 @@ const initCatalog = () => {
         models: getSelectedValues("model"),
         prices: getSelectedValues("price"),
       };
-      const filtered = applyFiltersToProducts(products, filters);
+      const filtered = applyFiltersToProducts(baseProducts, filters);
       renderProducts(filtered);
       closeDrawer();
     });
@@ -150,7 +173,7 @@ const initCatalog = () => {
         .forEach((input) => {
           input.checked = false;
         });
-      renderProducts(products);
+      renderProducts(baseProducts);
     });
   }
 };

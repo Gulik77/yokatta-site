@@ -917,7 +917,12 @@
           Search
         </button>
         <div class="drawer-search" id="searchPanel">
-          <input type="text" placeholder="Search items..." data-i18n-placeholder="searchPlaceholder" />
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="Search items..."
+            data-i18n-placeholder="searchPlaceholder"
+          />
         </div>
         <div class="drawer-lang" aria-label="Language switch">
           <button class="lang-button" data-lang="en">EN</button>
@@ -1056,6 +1061,7 @@
       const shopSubmenu = document.getElementById("shopSubmenu");
       const searchToggle = document.getElementById("searchToggle");
       const searchPanel = document.getElementById("searchPanel");
+      const searchInput = document.getElementById("searchInput");
       const langButtons = document.querySelectorAll(".lang-button");
 
       const tryPlay = async () => {
@@ -1142,7 +1148,26 @@
       });
       searchToggle.addEventListener("click", () => {
         searchPanel.classList.toggle("open");
+        if (searchPanel.classList.contains("open") && searchInput) {
+          searchInput.focus();
+        }
       });
+
+      const goToSearch = () => {
+        if (!searchInput) return;
+        const query = searchInput.value.trim();
+        if (!query) return;
+        window.location.href = `all-items.html?q=${encodeURIComponent(query)}`;
+      };
+
+      if (searchInput) {
+        searchInput.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            goToSearch();
+          }
+        });
+      }
 
       const translations = {
         en: {
