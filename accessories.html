@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Accessories</title>
+    <link rel="stylesheet" href="catalog.css" />
+    <style>
+      :root { color-scheme: dark; }
+      body { margin: 0; min-height: 100vh; font-family: system-ui, -apple-system, sans-serif; background: linear-gradient(180deg, hsl(0 0% var(--bg-start)) 0%, hsl(0 0% calc(var(--bg-start) + 6%)) 40%, hsl(0 0% calc(var(--bg-end) - 6%)) 70%, hsl(0 0% var(--bg-end)) 100%); color: var(--text-color, #f8f3ef); }
+      .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px 64px; }
+      .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; }
+      .brand { font-family: "Ballet", "Great Vibes", cursive; font-size: 32px; letter-spacing: 0.04em; color: inherit; text-decoration: none; }
+      .back-button { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.2); background: transparent; color: var(--text-color, #f8f3ef); cursor: pointer; transition: transform 0.2s ease, background 0.2s ease; }
+      .back-button:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.08); }
+      .lang { display: flex; gap: 8px; }
+      .lang button { padding: 6px 10px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.2); background: transparent; color: var(--text-color, #f8f3ef); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; }
+      .lang button.active { background: rgba(255, 255, 255, 0.12); }
+      .title { margin: 0 0 24px; font-size: 32px; letter-spacing: 0.18em; text-transform: uppercase; }
+      .empty { text-align: center; padding: 60px 0; opacity: 0.8; letter-spacing: 0.12em; text-transform: uppercase; }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="page-header">
+        <button class="back-button" id="backButton" aria-label="Back">←</button>
+        <a class="brand" href="index.html" data-i18n="brand">Yokatta</a>
+        <div class="lang">
+          <button data-lang="en">EN</button>
+          <button data-lang="ru">RU</button>
+        </div>
+      </header>
+      <div class="catalog-controls">
+        <h1 class="title" data-i18n="title">Accessories</h1>
+        <button class="filter-button" id="filterButton" data-i18n="filter">Filter</button>
+      </div>
+      <div class="empty" id="emptyState" hidden data-i18n="empty">Products coming soon</div>
+      <div class="grid" id="grid"></div>
+    </div>
+    <div class="filter-overlay" id="filterOverlay"></div>
+    <aside class="filter-drawer" id="filterDrawer">
+      <h2 class="filter-title" data-i18n="filterTitle">Filters</h2>
+      <div class="filter-group">
+        <label data-i18n="filterColor">Color</label>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox" name="color" value="Black" /> Black</label>
+          <label class="filter-option"><input type="checkbox" name="color" value="Silver" /> Silver</label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label data-i18n="filterStyle">Style</label>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox" name="style" value="Minimal" /> Minimal</label>
+          <label class="filter-option"><input type="checkbox" name="style" value="Classic" /> Classic</label>
+          <label class="filter-option"><input type="checkbox" name="style" value="Street" /> Street</label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label data-i18n="filterFit">Fit</label>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox" name="fit" value="Regular" /> Regular</label>
+          <label class="filter-option"><input type="checkbox" name="fit" value="Oversized" /> Oversized</label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label data-i18n="filterMaterial">Material</label>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox" name="material" value="Leather" /> Leather</label>
+          <label class="filter-option"><input type="checkbox" name="material" value="Metal" /> Metal</label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label data-i18n="filterModel">Model</label>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox" name="model" value="Belt" /> Belt</label>
+          <label class="filter-option"><input type="checkbox" name="model" value="Bag" /> Bag</label>
+          <label class="filter-option"><input type="checkbox" name="model" value="Sunglasses" /> Sunglasses</label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label data-i18n="filterPrice">Price</label>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox" name="price" value="0-50" /> $0–50</label>
+          <label class="filter-option"><input type="checkbox" name="price" value="50-100" /> $50–100</label>
+          <label class="filter-option"><input type="checkbox" name="price" value="100-200" /> $100–200</label>
+        </div>
+      </div>
+      <div class="filter-actions">
+        <button class="filter-apply" id="applyFilters" data-i18n="apply">Apply filters</button>
+        <button class="filter-reset" id="resetFilters" data-i18n="reset">Reset</button>
+      </div>
+    </aside>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="catalog.js"></script>
+    <script>
+      window.CATALOG_DATA = { products: [] };
+      const translations = { en: { brand: "Yokatta", title: "Accessories", empty: "Products coming soon", filter: "Filter", filterTitle: "Filters", filterColor: "Color", filterStyle: "Style", filterFit: "Fit", filterMaterial: "Material", filterModel: "Model", filterPrice: "Price", apply: "Apply filters", reset: "Reset" }, ru: { brand: "Yokatta", title: "Аксессуары", empty: "Скоро появятся товары", filter: "Фильтр", filterTitle: "Фильтры", filterColor: "Цвет", filterStyle: "Стиль", filterFit: "Посадка", filterMaterial: "Материал", filterModel: "Модель", filterPrice: "Цена", apply: "Применить", reset: "Сбросить" } };
+      const applyLanguage = (lang) => { const strings = translations[lang] || translations.en; document.querySelectorAll("[data-i18n]").forEach((el) => { const key = el.getAttribute("data-i18n"); if (strings[key]) el.textContent = strings[key]; }); document.querySelectorAll(".lang button").forEach((btn) => { btn.classList.toggle("active", btn.dataset.lang === lang); }); localStorage.setItem("lang", lang); };
+      document.querySelectorAll(".lang button").forEach((btn) => { btn.addEventListener("click", () => applyLanguage(btn.dataset.lang)); });
+      document.getElementById("backButton").addEventListener("click", () => history.back());
+      applyLanguage(localStorage.getItem("lang") || "en");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: linear-gradient(180deg, hsl(0 0% var(--bg-start)) 0%, hsl(0 0% calc(var(--bg-start) + 6%)) 40%, hsl(0 0% calc(var(--bg-end) - 6%)) 70%, hsl(0 0% var(--bg-end)) 100%);
+        color: var(--text-color, #f8f3ef);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      .page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 24px 64px;
+      }
+
+      .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 40px;
+      }
+
+      .brand {
+        font-family: "Ballet", "Great Vibes", cursive;
+        font-size: 32px;
+        letter-spacing: 0.04em;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .back-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: transparent;
+        color: var(--text-color, #f8f3ef);
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .back-button:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .lang {
+        display: flex;
+        gap: 8px;
+      }
+
+      .lang button {
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: transparent;
+        color: var(--text-color, #f8f3ef);
+        font-size: 12px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .lang button.active {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .title {
+        margin: 0 0 24px;
+        font-size: 28px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 32px;
+      }
+
+      .card {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px;
+        padding: 24px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .card h2 {
+        margin: 0 0 8px;
+        font-size: 16px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 6px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: rgba(248, 243, 239, 0.7);
+      }
+
+      input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--text-color, #f8f3ef);
+        margin-bottom: 10px;
+      }
+
+      .input-row {
+        position: relative;
+        margin-bottom: 10px;
+      }
+
+      .input-row input {
+        margin-bottom: 0;
+        padding-right: 44px;
+      }
+
+      .toggle-visibility {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: transparent;
+        color: var(--text-color, #f8f3ef);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+      }
+
+      .toggle-visibility img {
+        width: 20px;
+        height: 20px;
+        display: block;
+        object-fit: contain;
+        object-position: center;
+      }
+
+      .button {
+        padding: 10px 16px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text-color, #f8f3ef);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .link {
+        color: var(--text-color, #f8f3ef);
+        text-decoration: none;
+        opacity: 0.7;
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .message {
+        margin: 8px 0 20px;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        opacity: 0.85;
+      }
+
+      .message.error {
+        color: #f2a7a7;
+      }
+
+      .message.success {
+        color: #a7f2c4;
+      }
+
+      .dashboard {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px;
+        padding: 24px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .dashboard-row {
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 12px;
+        opacity: 0.7;
+      }
+
+      .dashboard-email {
+        font-size: 16px;
+        letter-spacing: 0.08em;
+      }
+
+      .admin-panel {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        display: grid;
+        gap: 12px;
+      }
+
+      .admin-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .admin-note {
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        opacity: 0.55;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="page-header">
+        <button class="back-button" id="backButton" aria-label="Back">
+          ←
+        </button>
+        <a class="brand" href="index.html" data-i18n="brand">Yokatta</a>
+        <div class="lang">
+          <button data-lang="en">EN</button>
+          <button data-lang="ru">RU</button>
+        </div>
+      </header>
+
+      <h1 class="title" data-i18n="title">Account</h1>
+      <div class="message" id="authMessage" hidden></div>
+
+      <div class="dashboard" id="dashboard" hidden>
+        <div class="dashboard-row" data-i18n="status">Logged in</div>
+        <div class="dashboard-email" id="userEmail">email@example.com</div>
+        <button class="button" id="logoutButton" data-i18n="logout">
+          Log out
+        </button>
+        <div class="admin-panel" id="adminPanel" hidden>
+          <div class="dashboard-row" data-i18n="adminTitle">Admin</div>
+          <div class="admin-actions">
+            <a
+              class="button"
+              id="adminUsers"
+              href="https://supabase.com/dashboard/project/kbguphxloslhdcpbxqub/auth/users"
+              target="_blank"
+              rel="noreferrer"
+              data-i18n="adminUsers"
+              >Users</a
+            >
+            <a
+              class="button"
+              id="adminTables"
+              href="https://supabase.com/dashboard/project/kbguphxloslhdcpbxqub/editor"
+              target="_blank"
+              rel="noreferrer"
+              data-i18n="adminTables"
+              >Tables</a
+            >
+            <a
+              class="button"
+              id="adminAnalytics"
+              href="https://analytics.google.com/analytics/web/"
+              target="_blank"
+              rel="noreferrer"
+              data-i18n="adminAnalytics"
+              >Analytics</a
+            >
+          </div>
+          <div class="admin-note" data-i18n="adminNote">Admin only</div>
+        </div>
+      </div>
+
+      <div class="grid" id="authGrid">
+        <form class="card" id="loginForm">
+          <h2 data-i18n="loginTitle">Login</h2>
+          <label data-i18n="emailLabel" for="login-email">Email</label>
+          <input id="login-email" type="email" required />
+          <label data-i18n="passwordLabel" for="login-password">Password</label>
+          <div class="input-row">
+            <input id="login-password" type="password" required />
+            <button
+              class="toggle-visibility"
+              type="button"
+              data-toggle-for="login-password"
+              aria-label="Show password"
+            >
+              <img src="image copy 4.png" alt="" />
+            </button>
+          </div>
+          <button class="button" data-i18n="signIn" type="submit">
+            Sign in
+          </button>
+          <a class="link" href="#" id="forgotLink" data-i18n="forgot"
+            >Forgot password</a
+          >
+          <div id="resetPanel" hidden>
+            <label data-i18n="resetLabel" for="reset-email">Email</label>
+            <input id="reset-email" type="email" />
+            <button class="button" id="resetButton" type="button" data-i18n="reset">
+              Send reset link
+            </button>
+          </div>
+        </form>
+
+        <form class="card" id="registerForm">
+          <h2 data-i18n="registerTitle">Registration</h2>
+          <label data-i18n="emailLabel" for="reg-email">Email</label>
+          <input id="reg-email" type="email" required />
+          <label data-i18n="passwordLabel" for="reg-password">Password</label>
+          <div class="input-row">
+            <input id="reg-password" type="password" required />
+            <button
+              class="toggle-visibility"
+              type="button"
+              data-toggle-for="reg-password"
+              aria-label="Show password"
+            >
+              <img src="image copy 4.png" alt="" />
+            </button>
+          </div>
+          <label data-i18n="confirmLabel" for="reg-confirm"
+            >Confirm password</label
+          >
+          <div class="input-row">
+            <input id="reg-confirm" type="password" required />
+            <button
+              class="toggle-visibility"
+              type="button"
+              data-toggle-for="reg-confirm"
+              aria-label="Show password"
+            >
+              <img src="image copy 4.png" alt="" />
+            </button>
+          </div>
+          <button class="button" data-i18n="create" type="submit">
+            Create account
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = "https://kbguphxloslhdcpbxqub.supabase.co";
+      const SUPABASE_KEY = "sb_publishable__Ve_OcWmEs8Hpns4PA-Teg_6gb7S-iO";
+      const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      const ADMIN_EMAIL = "your@email.com";
+
+      const translations = {
+        en: {
+          brand: "Yokatta",
+          title: "Account",
+          loginTitle: "Login",
+          registerTitle: "Registration",
+          emailLabel: "Email",
+          passwordLabel: "Password",
+          confirmLabel: "Confirm password",
+          signIn: "Sign in",
+          forgot: "Forgot password",
+          create: "Create account",
+          reset: "Send reset link",
+          resetLabel: "Email",
+          status: "Logged in",
+          logout: "Log out",
+          adminTitle: "Admin",
+          adminUsers: "Users",
+          adminTables: "Tables",
+          adminAnalytics: "Analytics",
+          adminNote: "Admin only",
+          msgSignupSuccess: "Registration successful",
+          msgSignupConfirm: "Check your email to confirm",
+          msgLoginSuccess: "Logged in",
+          msgLoginError: "Invalid email or password",
+          msgMismatch: "Passwords do not match",
+          msgResetSent: "Password reset email sent",
+          msgResetError: "Email not found",
+        },
+        ru: {
+          brand: "Yokatta",
+          title: "Аккаунт",
+          loginTitle: "Вход",
+          registerTitle: "Регистрация",
+          emailLabel: "Email",
+          passwordLabel: "Пароль",
+          confirmLabel: "Подтвердите пароль",
+          signIn: "Войти",
+          forgot: "Забыли пароль",
+          create: "Создать аккаунт",
+          reset: "Отправить ссылку",
+          resetLabel: "Email",
+          status: "Вход выполнен",
+          logout: "Выйти",
+          adminTitle: "Админ",
+          adminUsers: "Пользователи",
+          adminTables: "Таблицы",
+          adminAnalytics: "Аналитика",
+          adminNote: "Только для администратора",
+          msgSignupSuccess: "Регистрация успешна",
+          msgSignupConfirm: "Проверьте почту для подтверждения",
+          msgLoginSuccess: "Вход выполнен",
+          msgLoginError: "Неверный email или пароль",
+          msgMismatch: "Пароли не совпадают",
+          msgResetSent: "Ссылка для сброса отправлена",
+          msgResetError: "Email не найден",
+        },
+      };
+
+      let currentLang = localStorage.getItem("lang") || "en";
+
+      const applyLanguage = (lang) => {
+        currentLang = lang;
+        const strings = translations[lang] || translations.en;
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (strings[key]) el.textContent = strings[key];
+        });
+        document.querySelectorAll(".lang button").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.lang === lang);
+        });
+        localStorage.setItem("lang", lang);
+      };
+
+      document.querySelectorAll(".lang button").forEach((btn) => {
+        btn.addEventListener("click", () => applyLanguage(btn.dataset.lang));
+      });
+
+      const authMessage = document.getElementById("authMessage");
+      const authGrid = document.getElementById("authGrid");
+      const dashboard = document.getElementById("dashboard");
+      const adminPanel = document.getElementById("adminPanel");
+      const userEmail = document.getElementById("userEmail");
+      const loginForm = document.getElementById("loginForm");
+      const registerForm = document.getElementById("registerForm");
+      const logoutButton = document.getElementById("logoutButton");
+      const forgotLink = document.getElementById("forgotLink");
+      const resetPanel = document.getElementById("resetPanel");
+      const resetButton = document.getElementById("resetButton");
+      const resetEmail = document.getElementById("reset-email");
+
+      const t = (key) =>
+        (translations[currentLang] && translations[currentLang][key]) ||
+        translations.en[key] ||
+        key;
+
+      const setMessage = (key, type) => {
+        authMessage.textContent = t(key);
+        authMessage.className = `message ${type || ""}`;
+        authMessage.hidden = false;
+      };
+
+      const updateUI = (session) => {
+        if (session && session.user) {
+          authGrid.hidden = true;
+          dashboard.hidden = false;
+          userEmail.textContent = session.user.email || "";
+          adminPanel.hidden =
+            !ADMIN_EMAIL || session.user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase();
+        } else {
+          authGrid.hidden = false;
+          dashboard.hidden = true;
+          adminPanel.hidden = true;
+        }
+      };
+
+      loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const email = document.getElementById("login-email").value.trim();
+        const password = document.getElementById("login-password").value.trim();
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) {
+          setMessage("msgLoginError", "error");
+          return;
+        }
+        setMessage("msgLoginSuccess", "success");
+        updateUI(data.session);
+      });
+
+      registerForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const email = document.getElementById("reg-email").value.trim();
+        const password = document.getElementById("reg-password").value.trim();
+        const confirm = document.getElementById("reg-confirm").value.trim();
+        if (password !== confirm) {
+          setMessage("msgMismatch", "error");
+          return;
+        }
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+        });
+        if (error) {
+          setMessage(error.message || "msgLoginError", "error");
+          return;
+        }
+        if (data.session) {
+          setMessage("msgSignupSuccess", "success");
+          updateUI(data.session);
+        } else {
+          setMessage("msgSignupConfirm", "success");
+        }
+      });
+
+      logoutButton.addEventListener("click", async () => {
+        await supabaseClient.auth.signOut();
+        updateUI(null);
+      });
+
+      forgotLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        resetPanel.hidden = !resetPanel.hidden;
+      });
+
+      resetButton.addEventListener("click", async () => {
+        const email =
+          resetEmail.value.trim() ||
+          document.getElementById("login-email").value.trim();
+        if (!email) return;
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(
+          email,
+          { redirectTo: `${window.location.origin}/account.html` }
+        );
+        if (error) {
+          setMessage("msgResetError", "error");
+          return;
+        }
+        setMessage("msgResetSent", "success");
+      });
+
+      document.querySelectorAll("[data-toggle-for]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const input = document.getElementById(btn.dataset.toggleFor);
+          if (!input) return;
+          const isPassword = input.type === "password";
+          input.type = isPassword ? "text" : "password";
+          btn.setAttribute("aria-label", isPassword ? "Hide password" : "Show password");
+          const icon = btn.querySelector("img");
+          if (icon) {
+            icon.src = isPassword ? "image copy 5.png" : "image copy 4.png";
+          }
+        });
+      });
+
+      document
+        .getElementById("backButton")
+        .addEventListener("click", () => history.back());
+
+      supabaseClient.auth.getSession().then(({ data }) => {
+        updateUI(data.session);
+      });
+
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        updateUI(session);
+      });
+
+      applyLanguage(currentLang);
+    </script>
+  </body>
+</html>
