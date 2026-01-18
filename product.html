@@ -588,7 +588,9 @@
         },
       };
 
+      let currentLang = localStorage.getItem("lang") || "en";
       const applyLanguage = (lang) => {
+        currentLang = lang;
         const strings = translations[lang] || translations.en;
         document.querySelectorAll("[data-i18n]").forEach((el) => {
           const key = el.getAttribute("data-i18n");
@@ -598,6 +600,7 @@
           btn.classList.toggle("active", btn.dataset.lang === lang);
         });
         localStorage.setItem("lang", lang);
+        updateProductUI();
       };
 
       document.querySelectorAll(".lang button").forEach((btn) => {
@@ -606,9 +609,92 @@
 
       document.getElementById("backButton").addEventListener("click", () => history.back());
 
-      const images = ["bag.jpg", "denim.jpg", "hoodies.jpg"];
-      let currentIndex = 0;
       const galleryImage = document.getElementById("galleryImage");
+      const titleEl = document.querySelector(".title");
+      const priceEl = document.querySelector(".price");
+      const colorEl = document.querySelector(".color");
+      const sizeButtons = Array.from(document.querySelectorAll(".size"));
+      const addToCart = document.getElementById("addToCart");
+      const wishButton = document.querySelector(".wish");
+      let images = ["bag.jpg", "denim.jpg", "hoodies.jpg"];
+      let currentIndex = 0;
+
+      const loadProductFromStorage = () => {
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get("productId");
+        if (productId) {
+          try {
+            const catalogRaw = localStorage.getItem("catalogProducts");
+            if (catalogRaw) {
+              const list = JSON.parse(catalogRaw);
+              const match = list.find((item) => item.id === productId);
+              if (match) return match;
+            }
+          } catch (err) {}
+        }
+        try {
+          const selected = localStorage.getItem("selectedProduct");
+          if (selected) return JSON.parse(selected);
+        } catch (err) {}
+        return null;
+      };
+
+      const productData =
+        loadProductFromStorage() || {
+          id: "product-001",
+          name: "Yokatta Essential",
+          price: 180,
+          color: "Black",
+          category: "Outerwear",
+          sizes: ["XS", "S", "M", "L"],
+        };
+
+      const categoryImages = {
+        "T-shirts": ["tshirts.jpg"],
+        Hoodies: ["hoodies.jpg"],
+        Jeans: ["denim.jpg"],
+        Shorts: ["denim.jpg"],
+        Outerwear: ["hoodies.jpg", "denim.jpg"],
+        Accessories: ["bag.jpg", "sunglasses.jpeg", "shoes.png"],
+      };
+
+      const updateProductUI = () => {
+        if (titleEl) titleEl.textContent = productData.name;
+        if (priceEl) priceEl.textContent = `$${productData.price}`;
+        if (colorEl) {
+          colorEl.textContent =
+            currentLang === "ru"
+              ? `Цвет: ${productData.color}`
+              : `Color: ${productData.color}`;
+        }
+
+        const availableSizes = productData.sizes || [];
+        sizeButtons.forEach((btn) => {
+          const size = btn.dataset.size;
+          const isAvailable = availableSizes.includes(size);
+          btn.classList.toggle("disabled", !isAvailable);
+          btn.classList.remove("active");
+        });
+        addToCart.classList.remove("enabled");
+
+        images = categoryImages[productData.category] || images;
+        currentIndex = 0;
+        if (galleryImage) galleryImage.src = images[currentIndex];
+      };
+
+      const bindSizeButtons = () => {
+        sizeButtons.forEach((btn) => {
+          if (btn.dataset.bound) return;
+          btn.dataset.bound = "true";
+          btn.addEventListener("click", () => {
+            if (btn.classList.contains("disabled")) return;
+            sizeButtons.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            addToCart.classList.add("enabled");
+          });
+        });
+      };
+
       document.getElementById("prevImage").addEventListener("click", () => {
         currentIndex = (currentIndex - 1 + images.length) % images.length;
         galleryImage.src = images[currentIndex];
@@ -616,24 +702,6 @@
       document.getElementById("nextImage").addEventListener("click", () => {
         currentIndex = (currentIndex + 1) % images.length;
         galleryImage.src = images[currentIndex];
-      });
-
-      const sizeButtons = document.querySelectorAll(".size:not(.disabled)");
-      const addToCart = document.getElementById("addToCart");
-      const wishButton = document.querySelector(".wish");
-      const productData = {
-        id: "product-001",
-        name: "Yokatta Essential",
-        price: 180,
-        color: "Black",
-        category: "Outerwear",
-      };
-      sizeButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          sizeButtons.forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          addToCart.classList.add("enabled");
-        });
       });
 
       addToCart.addEventListener("click", async () => {
@@ -683,7 +751,8 @@
         });
       });
 
-      applyLanguage(localStorage.getItem("lang") || "en");
+      bindSizeButtons();
+      applyLanguage(currentLang);
     </script>
   </body>
 </html>

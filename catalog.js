@@ -59,7 +59,9 @@ const renderProducts = (products) => {
       (product) => `
       <div class="card" data-id="${product.id}">
         <div class="thumb">
-          <a class="view-button" href="product.html">View</a>
+          <a class="view-button" href="product.html?productId=${encodeURIComponent(
+            product.id
+          )}" data-id="${product.id}">View</a>
         </div>
         <div class="card-title">${product.name}</div>
         <div class="card-price">$${product.price}</div>
@@ -99,6 +101,16 @@ const renderProducts = (products) => {
       alert("Added to wishlist.");
     });
   });
+
+  grid.querySelectorAll(".view-button").forEach((link) => {
+    link.addEventListener("click", () => {
+      const productId = link.dataset.id;
+      const item = products.find((p) => p.id === productId);
+      if (item) {
+        localStorage.setItem("selectedProduct", JSON.stringify(item));
+      }
+    });
+  });
 };
 
 const filterBySearch = (products, query) => {
@@ -125,6 +137,7 @@ const filterBySearch = (products, query) => {
 const initCatalog = () => {
   if (!window.CATALOG_DATA) return;
   const products = window.CATALOG_DATA.products || [];
+  localStorage.setItem("catalogProducts", JSON.stringify(products));
   const query = new URLSearchParams(window.location.search).get("q") || "";
   const baseProducts = filterBySearch(products, query);
   renderProducts(baseProducts);
