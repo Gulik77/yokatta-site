@@ -688,6 +688,7 @@
       const updateUI = (session) => {
         if (session && session.user) {
           authGrid.hidden = true;
+          authGrid.style.display = "none";
           dashboard.hidden = false;
           userEmail.textContent = session.user.email || "";
           adminPanel.hidden =
@@ -695,6 +696,7 @@
           loadOrders(session.user.id);
         } else {
           authGrid.hidden = false;
+          authGrid.style.display = "grid";
           dashboard.hidden = true;
           adminPanel.hidden = true;
           loginForm.hidden = false;
@@ -842,9 +844,11 @@
         }
       });
 
-      logoutButton.addEventListener("click", async () => {
+      logoutButton.addEventListener("click", async (event) => {
+        event.preventDefault();
         await supabaseClient.auth.signOut();
         updateUI(null);
+        setMessage("msgLoggedOut", "success");
       });
 
       forgotLink.addEventListener("click", (event) => {
