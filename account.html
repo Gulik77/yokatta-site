@@ -692,17 +692,23 @@
           authGrid.hidden = true;
           authGrid.style.display = "none";
           dashboard.hidden = false;
+          dashboard.style.display = "grid";
           userEmail.textContent = session.user.email || "";
           adminPanel.hidden =
             !ADMIN_EMAIL || session.user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase();
+          loginForm.style.display = "none";
+          registerForm.style.display = "none";
           loadOrders(session.user.id);
         } else {
           authGrid.hidden = false;
           authGrid.style.display = "grid";
           dashboard.hidden = true;
+          dashboard.style.display = "none";
           adminPanel.hidden = true;
           loginForm.hidden = false;
           registerForm.hidden = true;
+          loginForm.style.display = "grid";
+          registerForm.style.display = "none";
         }
       };
 
@@ -799,9 +805,13 @@
         if (view === "register") {
           loginForm.hidden = true;
           registerForm.hidden = false;
+          loginForm.style.display = "none";
+          registerForm.style.display = "grid";
         } else {
           loginForm.hidden = false;
           registerForm.hidden = true;
+          loginForm.style.display = "grid";
+          registerForm.style.display = "none";
         }
       };
 
