@@ -202,6 +202,10 @@
         cursor: pointer;
       }
 
+      .hidden {
+        display: none !important;
+      }
+
       .message {
         margin: 8px 0 20px;
         font-size: 12px;
@@ -500,7 +504,7 @@
           </button>
         </form>
 
-        <form class="card" id="registerForm" hidden>
+        <form class="card hidden" id="registerForm" hidden>
           <h2 data-i18n="registerTitle">Registration</h2>
           <label data-i18n="emailLabel" for="reg-email">Email</label>
           <input id="reg-email" type="email" required />
@@ -696,8 +700,8 @@
           userEmail.textContent = session.user.email || "";
           adminPanel.hidden =
             !ADMIN_EMAIL || session.user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase();
-          loginForm.style.display = "none";
-          registerForm.style.display = "none";
+          loginForm.classList.add("hidden");
+          registerForm.classList.add("hidden");
           loadOrders(session.user.id);
         } else {
           authGrid.hidden = false;
@@ -707,8 +711,8 @@
           adminPanel.hidden = true;
           loginForm.hidden = false;
           registerForm.hidden = true;
-          loginForm.style.display = "grid";
-          registerForm.style.display = "none";
+          loginForm.classList.remove("hidden");
+          registerForm.classList.add("hidden");
         }
       };
 
@@ -805,13 +809,13 @@
         if (view === "register") {
           loginForm.hidden = true;
           registerForm.hidden = false;
-          loginForm.style.display = "none";
-          registerForm.style.display = "grid";
+          loginForm.classList.add("hidden");
+          registerForm.classList.remove("hidden");
         } else {
           loginForm.hidden = false;
           registerForm.hidden = true;
-          loginForm.style.display = "grid";
-          registerForm.style.display = "none";
+          loginForm.classList.remove("hidden");
+          registerForm.classList.add("hidden");
         }
       };
 
