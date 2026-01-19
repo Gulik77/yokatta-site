@@ -43,6 +43,72 @@ const applyFiltersToProducts = (products, filters) =>
     return true;
   });
 
+const getLang = () => localStorage.getItem("lang") || "en";
+const viewLabels = { en: "View", ru: "Смотреть" };
+const filterLabels = {
+  en: {
+    Black: "Black",
+    White: "White",
+    Blue: "Blue",
+    Grey: "Grey",
+    Street: "Street",
+    Classic: "Classic",
+    Minimal: "Minimal",
+    Regular: "Regular",
+    Relaxed: "Relaxed",
+    Slim: "Slim",
+    Cotton: "Cotton",
+    Fleece: "Fleece",
+    Denim: "Denim",
+    Leather: "Leather",
+    "0-50": "$0–50",
+    "50-100": "$50–100",
+    "100-200": "$100–200",
+    "200+": "$200+",
+  },
+  ru: {
+    Black: "Черный",
+    White: "Белый",
+    Blue: "Синий",
+    Grey: "Серый",
+    Street: "Street",
+    Classic: "Classic",
+    Minimal: "Minimal",
+    Regular: "Regular",
+    Relaxed: "Relaxed",
+    Slim: "Slim",
+    Cotton: "Хлопок",
+    Fleece: "Флис",
+    Denim: "Деним",
+    Leather: "Кожа",
+    "0-50": "$0–50",
+    "50-100": "$50–100",
+    "100-200": "$100–200",
+    "200+": "$200+",
+  },
+};
+
+const translateFilterOptions = (lang) => {
+  const map = filterLabels[lang] || filterLabels.en;
+  document.querySelectorAll(".filter-option").forEach((label) => {
+    const input = label.querySelector("input");
+    if (!input) return;
+    let textSpan = label.querySelector(".filter-text");
+    if (!textSpan) {
+      const textNodes = Array.from(label.childNodes).filter(
+        (node) => node.nodeType === 3 && node.textContent.trim()
+      );
+      const text = textNodes.map((node) => node.textContent).join(" ").trim();
+      textNodes.forEach((node) => node.remove());
+      textSpan = document.createElement("span");
+      textSpan.className = "filter-text";
+      textSpan.textContent = text || input.value;
+      label.appendChild(textSpan);
+    }
+    textSpan.textContent = map[input.value] || input.value;
+  });
+};
+
 const renderProducts = (products) => {
   const grid = document.getElementById("grid");
   if (!grid) return;
@@ -54,6 +120,7 @@ const renderProducts = (products) => {
   }
   const emptyState = document.getElementById("emptyState");
   if (emptyState) emptyState.hidden = true;
+  const viewLabel = viewLabels[getLang()] || viewLabels.en;
   grid.innerHTML = products
     .map(
       (product) => `
@@ -61,7 +128,7 @@ const renderProducts = (products) => {
         <div class="thumb">
           <a class="view-button" href="product.html?productId=${encodeURIComponent(
             product.id
-          )}" data-id="${product.id}">View</a>
+          )}" data-id="${product.id}">${viewLabel}</a>
         </div>
         <div class="card-title">${product.name}</div>
         <div class="card-price">$${product.price}</div>
@@ -134,13 +201,19 @@ const filterBySearch = (products, query) => {
   });
 };
 
+let baseProducts = [];
+let currentProducts = [];
+
 const initCatalog = () => {
   if (!window.CATALOG_DATA) return;
   const products = window.CATALOG_DATA.products || [];
+  baseProducts = products;
   localStorage.setItem("catalogProducts", JSON.stringify(products));
   const query = new URLSearchParams(window.location.search).get("q") || "";
-  const baseProducts = filterBySearch(products, query);
-  renderProducts(baseProducts);
+  baseProducts = filterBySearch(products, query);
+  currentProducts = baseProducts;
+  renderProducts(currentProducts);
+  translateFilterOptions(getLang());
 
   const filterButton = document.getElementById("filterButton");
   const filterDrawer = document.getElementById("filterDrawer");
@@ -172,7 +245,8 @@ const initCatalog = () => {
         prices: getSelectedValues("price"),
       };
       const filtered = applyFiltersToProducts(baseProducts, filters);
-      renderProducts(filtered);
+      currentProducts = filtered;
+      renderProducts(currentProducts);
       closeDrawer();
     });
   }
@@ -186,9 +260,17 @@ const initCatalog = () => {
         .forEach((input) => {
           input.checked = false;
         });
-      renderProducts(baseProducts);
+      currentProducts = baseProducts;
+      renderProducts(currentProducts);
     });
   }
+
+  document.querySelectorAll(".lang button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      translateFilterOptions(btn.dataset.lang);
+      renderProducts(currentProducts);
+    });
+  });
 };
 
 document.addEventListener("DOMContentLoaded", initCatalog);

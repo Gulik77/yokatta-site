@@ -943,21 +943,23 @@
     </aside>
     <div class="stage">
       <div class="title">Yokatta</div>
-      <div class="subtitle">couture house</div>
+      <div class="subtitle" data-i18n="subtitle">couture house</div>
       <div class="video-wrap">
         <video id="mainVideo" autoplay muted playsinline loop>
           <!-- Замените путь на ваш файл -->
           <source src="video.mp4" type="video/mp4" />
-          Ваш браузер не поддерживает видео.
+          <span data-i18n="videoFallback">Ваш браузер не поддерживает видео.</span>
         </video>
       </div>
     </div>
 
-    <div class="hint" id="hint">Если видео не стартовало, кликните по нему.</div>
+    <div class="hint" id="hint" data-i18n="hint">
+      Если видео не стартовало, кликните по нему.
+    </div>
 
     <section class="story" id="story">
-      <h2 class="story-title">The story</h2>
-      <p class="story-text">
+      <h2 class="story-title" data-i18n="storyTitle">The story</h2>
+      <p class="story-text" data-i18n="storyText">
         Yokatta is a luxury brand founded in 2026, blending craftsmanship with
         modern aesthetics. We create pieces where every detail matters: refined
         lines, premium materials, and effortless simplicity. Inspired by the
@@ -968,73 +970,73 @@
 
     <section class="section-block tight-top-closer tight-bottom">
       <div class="thin-line"></div>
-      <div class="block-label">SS26 OUT NOW</div>
+      <div class="block-label" data-i18n="blockNow">SS26 OUT NOW</div>
       <div class="categories" id="categories">
         <div class="category-card">
           <div class="category-rect left">
             <img src="tshirts.jpg" alt="T-Shorts" />
           </div>
-          <div class="category-label">T-SHORTS</div>
+          <div class="category-label" data-i18n="catLabelTees">T-SHORTS</div>
         </div>
         <div class="category-card">
           <div class="category-rect middle">
             <img src="hoodies.jpg" alt="Hoodies" />
           </div>
-          <div class="category-label">HOODIES</div>
+          <div class="category-label" data-i18n="catLabelHoodies">HOODIES</div>
         </div>
         <div class="category-card">
           <div class="category-rect right">
             <img src="denim.jpg" alt="Denim" />
           </div>
-          <div class="category-label">DENIM</div>
+          <div class="category-label" data-i18n="catLabelDenim">DENIM</div>
         </div>
       </div>
     </section>
     <section class="section-block balanced">
       <div class="thin-line"></div>
       <div class="features">
-        <div class="features-title">WHY US / WHY OUR CLOTHES</div>
+        <div class="features-title" data-i18n="featuresTitle">WHY US / WHY OUR CLOTHES</div>
         <ul class="features-list">
           <li class="features-item">
             <span class="features-icon"></span>
-            <span>Premium fabrics</span>
+            <span data-i18n="feature1">Premium fabrics</span>
           </li>
           <li class="features-item">
             <span class="features-icon"></span>
-            <span>Street-inspired design</span>
+            <span data-i18n="feature2">Street-inspired design</span>
           </li>
           <li class="features-item">
             <span class="features-icon"></span>
-            <span>Limited collections</span>
+            <span data-i18n="feature3">Limited collections</span>
           </li>
           <li class="features-item">
             <span class="features-icon"></span>
-            <span>Attention to details</span>
+            <span data-i18n="feature4">Attention to details</span>
           </li>
         </ul>
       </div>
     </section>
     <section class="section-block tighter-top">
       <div class="thin-line"></div>
-      <div class="block-label">COMING SOON</div>
+      <div class="block-label" data-i18n="blockSoon">COMING SOON</div>
       <div class="showcase" id="showcase">
         <div class="showcase-item">
           <div class="showcase-rect left">
             <img src="bag.jpg" alt="Bags" />
           </div>
-          <div class="showcase-label">BAGS</div>
+          <div class="showcase-label" data-i18n="showcaseBags">BAGS</div>
         </div>
         <div class="showcase-item">
           <div class="showcase-rect middle">
             <img src="shoes.png" alt="Shoes" />
           </div>
-          <div class="showcase-label">SHOES</div>
+          <div class="showcase-label" data-i18n="showcaseShoes">SHOES</div>
         </div>
         <div class="showcase-item">
           <div class="showcase-rect right">
             <img src="sunglasses.jpeg" alt="Sunglasses" />
           </div>
-          <div class="showcase-label">SUNGLASSES</div>
+          <div class="showcase-label" data-i18n="showcaseSunglasses">SUNGLASSES</div>
         </div>
       </div>
     </section>
@@ -1042,19 +1044,31 @@
     <footer class="site-footer">
       <div class="footer-top">
         <div class="footer-brand">
-          <div class="footer-brand-name">yokatta</div>
-          <div class="footer-tagline">Born in the city that never sleeps.</div>
+          <div class="footer-brand-name" data-i18n="footerBrand">yokatta</div>
+          <div class="footer-tagline" data-i18n="footerTagline">
+            Born in the city that never sleeps.
+          </div>
         </div>
         <div class="footer-links">
-          <a href="https://instagram.com/yokatta">Instagram</a>
-          <a href="https://tiktok.com/@yokatta">TikTok</a>
+          <a href="https://instagram.com/yokatta" data-i18n="footerInstagram">
+            Instagram
+          </a>
+          <a href="https://tiktok.com/@yokatta" data-i18n="footerTiktok">
+            TikTok
+          </a>
         </div>
         <div class="footer-contact">
-          <div><a href="mailto:hello@yokatta.com">hello@yokatta.com</a></div>
-          <div>London, UK</div>
+          <div>
+            <a href="mailto:hello@yokatta.com" data-i18n="footerEmail"
+              >hello@yokatta.com</a
+            >
+          </div>
+          <div data-i18n="footerLocation">London, UK</div>
         </div>
       </div>
-      <div class="footer-bottom">© 2026 yokatta. All rights reserved.</div>
+      <div class="footer-bottom" data-i18n="footerCopyright">
+        © 2026 yokatta. All rights reserved.
+      </div>
     </footer>
 
     <script>
@@ -1168,6 +1182,8 @@
         if (!searchInput) return;
         const query = searchInput.value.trim();
         if (!query) return;
+        searchInput.value = "";
+        searchPanel.classList.remove("open");
         window.location.href = `all-items.html?q=${encodeURIComponent(query)}`;
       };
 
@@ -1183,6 +1199,32 @@
       const translations = {
         en: {
           brand: "Yokatta",
+          subtitle: "couture house",
+          videoFallback: "Your browser does not support the video.",
+          hint: "If the video did not start, click it.",
+          storyTitle: "The story",
+          storyText:
+            "Yokatta is a luxury brand founded in 2026, blending craftsmanship with modern aesthetics. We create pieces where every detail matters: refined lines, premium materials, and effortless simplicity. Inspired by the night city and neon glow, we build a brand of quiet confidence, quality, and elegance that speaks without words.",
+          blockNow: "SS26 OUT NOW",
+          catLabelTees: "T-SHIRTS",
+          catLabelHoodies: "HOODIES",
+          catLabelDenim: "DENIM",
+          featuresTitle: "WHY US / WHY OUR CLOTHES",
+          feature1: "Premium fabrics",
+          feature2: "Street-inspired design",
+          feature3: "Limited collections",
+          feature4: "Attention to details",
+          blockSoon: "COMING SOON",
+          showcaseBags: "BAGS",
+          showcaseShoes: "SHOES",
+          showcaseSunglasses: "SUNGLASSES",
+          footerBrand: "yokatta",
+          footerTagline: "Born in the city that never sleeps.",
+          footerInstagram: "Instagram",
+          footerTiktok: "TikTok",
+          footerEmail: "hello@yokatta.com",
+          footerLocation: "London, UK",
+          footerCopyright: "© 2026 yokatta. All rights reserved.",
           menuShop: "Menu / Shop",
           catAll: "All items",
           catTees: "T-shirts",
@@ -1199,6 +1241,32 @@
         },
         ru: {
           brand: "Yokatta",
+          subtitle: "кутюрный дом",
+          videoFallback: "Ваш браузер не поддерживает видео.",
+          hint: "Если видео не стартовало, кликните по нему.",
+          storyTitle: "История",
+          storyText:
+            "Yokatta — люксовый бренд, основанный в 2026 году, где ремесло встречается с современными линиями. Мы создаем вещи, в которых каждая деталь важна: благородные материалы, чистые силуэты и спокойная элегантность. Вдохновленные ночным городом и неоном, мы строим бренд уверенности и качества без лишних слов.",
+          blockNow: "SS26 УЖЕ В ПРОДАЖЕ",
+          catLabelTees: "ФУТБОЛКИ",
+          catLabelHoodies: "ХУДИ",
+          catLabelDenim: "ДЕНИМ",
+          featuresTitle: "ПОЧЕМУ МЫ / НАША ОДЕЖДА",
+          feature1: "Премиальные ткани",
+          feature2: "Уличный дизайн",
+          feature3: "Ограниченные коллекции",
+          feature4: "Внимание к деталям",
+          blockSoon: "СКОРО",
+          showcaseBags: "СУМКИ",
+          showcaseShoes: "ОБУВЬ",
+          showcaseSunglasses: "ОЧКИ",
+          footerBrand: "yokatta",
+          footerTagline: "Born in the city that never sleeps.",
+          footerInstagram: "Instagram",
+          footerTiktok: "TikTok",
+          footerEmail: "hello@yokatta.com",
+          footerLocation: "Лондон, Великобритания",
+          footerCopyright: "© 2026 yokatta. Все права защищены.",
           menuShop: "Меню / Каталог",
           catAll: "Все товары",
           catTees: "Футболки",

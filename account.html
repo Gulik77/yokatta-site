@@ -195,6 +195,13 @@
         text-transform: uppercase;
       }
 
+      .switch-link {
+        border: none;
+        background: none;
+        padding: 0;
+        cursor: pointer;
+      }
+
       .message {
         margin: 8px 0 20px;
         font-size: 12px;
@@ -224,6 +231,99 @@
         text-transform: uppercase;
         font-size: 12px;
         opacity: 0.7;
+      }
+
+      .orders-list {
+        display: grid;
+        gap: 10px;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.85;
+      }
+
+      .order-item {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 12px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .order-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+        font-size: 11px;
+        opacity: 0.7;
+      }
+
+      .order-status {
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        font-size: 10px;
+        letter-spacing: 0.18em;
+      }
+
+      .order-products {
+        display: grid;
+        gap: 10px;
+      }
+
+      .order-product {
+        display: grid;
+        grid-template-columns: 56px 1fr;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .order-product img {
+        width: 56px;
+        height: 56px;
+        border-radius: 10px;
+        object-fit: cover;
+        background: #111;
+      }
+
+      .order-product-name {
+        font-size: 12px;
+        letter-spacing: 0.1em;
+      }
+
+      .order-product-meta {
+        font-size: 11px;
+        opacity: 0.7;
+      }
+
+      .order-summary {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+        font-size: 11px;
+        opacity: 0.75;
+      }
+
+      .order-tracking {
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        opacity: 0.65;
+      }
+
+      .order-items {
+        display: grid;
+        gap: 6px;
+        opacity: 0.75;
+      }
+
+      .order-line {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
       }
 
       .dashboard-email {
@@ -314,6 +414,14 @@
       <div class="dashboard" id="dashboard" hidden>
         <div class="dashboard-row" data-i18n="status">Logged in</div>
         <div class="dashboard-email" id="userEmail">email@example.com</div>
+        <div class="dashboard-row" data-i18n="accountInfoTitle">My data</div>
+        <div class="dashboard-row" id="accountInfo" data-i18n="accountInfo">
+          Profile ready for orders and wishlist.
+        </div>
+        <div class="dashboard-row" data-i18n="ordersTitle">Orders</div>
+        <div class="orders-list" id="ordersInfo" data-i18n="ordersEmpty">
+          No orders yet.
+        </div>
         <button class="button" id="logoutButton" data-i18n="logout">
           Log out
         </button>
@@ -382,9 +490,17 @@
               Send reset link
             </button>
           </div>
+          <button
+            class="link switch-link"
+            type="button"
+            id="showRegister"
+            data-i18n="showRegister"
+          >
+            Create account
+          </button>
         </form>
 
-        <form class="card" id="registerForm">
+        <form class="card" id="registerForm" hidden>
           <h2 data-i18n="registerTitle">Registration</h2>
           <label data-i18n="emailLabel" for="reg-email">Email</label>
           <input id="reg-email" type="email" required />
@@ -417,6 +533,14 @@
           <button class="button" data-i18n="create" type="submit">
             Create account
           </button>
+          <button
+            class="link switch-link"
+            type="button"
+            id="showLogin"
+            data-i18n="showLogin"
+          >
+            Back to login
+          </button>
         </form>
       </div>
     </div>
@@ -444,6 +568,20 @@
           resetLabel: "Email",
           status: "Logged in",
           logout: "Log out",
+          accountInfoTitle: "My data",
+          accountInfo: "Profile ready for orders and wishlist.",
+          ordersTitle: "Orders",
+          ordersEmpty: "No orders yet.",
+          ordersNoItems: "Items hidden",
+          orderLabel: "Order",
+          orderStatus: "Processing",
+          orderStatusShipped: "Shipped",
+          orderStatusDelivered: "Delivered",
+          orderTotal: "Total",
+          orderShipping: "Shipping",
+          orderTracking: "Tracking",
+          showRegister: "Create account",
+          showLogin: "Back to login",
           adminTitle: "Admin",
           adminUsers: "Users",
           adminTables: "Tables",
@@ -472,6 +610,20 @@
           resetLabel: "Email",
           status: "Вход выполнен",
           logout: "Выйти",
+          accountInfoTitle: "Мои данные",
+          accountInfo: "Профиль готов для заказов и избранного.",
+          ordersTitle: "Заказы",
+          ordersEmpty: "Пока нет заказов.",
+          ordersNoItems: "Товары скрыты",
+          orderLabel: "Заказ",
+          orderStatus: "В обработке",
+          orderStatusShipped: "Отправлен",
+          orderStatusDelivered: "Доставлен",
+          orderTotal: "Итого",
+          orderShipping: "Доставка",
+          orderTracking: "Трек",
+          showRegister: "Создать аккаунт",
+          showLogin: "Назад ко входу",
           adminTitle: "Админ",
           adminUsers: "Пользователи",
           adminTables: "Таблицы",
@@ -511,8 +663,11 @@
       const dashboard = document.getElementById("dashboard");
       const adminPanel = document.getElementById("adminPanel");
       const userEmail = document.getElementById("userEmail");
+      const ordersInfo = document.getElementById("ordersInfo");
       const loginForm = document.getElementById("loginForm");
       const registerForm = document.getElementById("registerForm");
+      const showRegister = document.getElementById("showRegister");
+      const showLogin = document.getElementById("showLogin");
       const logoutButton = document.getElementById("logoutButton");
       const forgotLink = document.getElementById("forgotLink");
       const resetPanel = document.getElementById("resetPanel");
@@ -537,10 +692,112 @@
           userEmail.textContent = session.user.email || "";
           adminPanel.hidden =
             !ADMIN_EMAIL || session.user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase();
+          loadOrders(session.user.id);
         } else {
           authGrid.hidden = false;
           dashboard.hidden = true;
           adminPanel.hidden = true;
+          loginForm.hidden = false;
+          registerForm.hidden = true;
+        }
+      };
+
+      const orderImages = {
+        "T-shirts": "tshirts.jpg",
+        Hoodies: "hoodies.jpg",
+        Jeans: "denim.jpg",
+        Shorts: "denim.jpg",
+        Outerwear: "hoodies.jpg",
+        Accessories: "bag.jpg",
+      };
+
+      const getStatusKey = (status) => {
+        if (!status) return null;
+        const normalized = status.toLowerCase();
+        if (normalized === "delivered") return "orderStatusDelivered";
+        if (normalized === "shipped") return "orderStatusShipped";
+        if (normalized === "processing") return "orderStatus";
+        return null;
+      };
+
+      const loadOrders = async (userId) => {
+        if (!ordersInfo) return;
+        const { data, error } = await supabaseClient
+          .from("orders")
+          .select("id, total, created_at, items, shipping")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false })
+          .limit(5);
+        if (error || !data || data.length === 0) {
+          ordersInfo.textContent = t("ordersEmpty");
+          return;
+        }
+        ordersInfo.innerHTML = data
+          .map((order) => {
+            const created = new Date(order.created_at);
+            const date = created.toLocaleDateString();
+            const days =
+              (Date.now() - created.getTime()) / (1000 * 60 * 60 * 24);
+            const statusKey =
+              getStatusKey(order.shipping?.status) ||
+              (days > 7
+                ? "orderStatusDelivered"
+                : days > 3
+                  ? "orderStatusShipped"
+                  : "orderStatus");
+            const trackingCode =
+              order.shipping?.tracking ||
+              (order.id ? order.id.replace(/-/g, "").slice(-6).toUpperCase() : "--");
+            const items = Array.isArray(order.items) ? order.items : [];
+            const itemsHtml =
+              items.length > 0
+                ? items
+                    .map((item) => {
+                      const qty = item.quantity || 1;
+                      const image =
+                        orderImages[item.category] || orderImages.Accessories;
+                      const meta = [item.size, item.color]
+                        .filter(Boolean)
+                        .join(" • ");
+                      return `
+                        <div class="order-product">
+                          <img src="${image}" alt="" />
+                          <div>
+                            <div class="order-product-name">${item.name}</div>
+                            <div class="order-product-meta">${meta} • x${qty}</div>
+                          </div>
+                        </div>
+                      `;
+                    })
+                    .join("")
+                : `<div class="order-line"><span>${t("ordersNoItems")}</span></div>`;
+            return `
+              <div class="order-item">
+                <div class="order-header">
+                  <span>${t("orderLabel")} ${date}</span>
+                  <span class="order-status">${t(statusKey)}</span>
+                </div>
+                <div class="order-products">${itemsHtml}</div>
+                <div class="order-summary">
+                  <span>${t("orderTotal")}: $${order.total}</span>
+                  <span>${t("orderShipping")}: ${order.shipping?.city || "-"}</span>
+                </div>
+                <div class="order-tracking">
+                  ${t("orderTracking")}: ${trackingCode}
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      };
+
+      const toggleAuthView = (view) => {
+        if (view === "register") {
+          loginForm.hidden = true;
+          registerForm.hidden = false;
+        } else {
+          loginForm.hidden = false;
+          registerForm.hidden = true;
         }
       };
 
@@ -594,6 +851,9 @@
         event.preventDefault();
         resetPanel.hidden = !resetPanel.hidden;
       });
+
+      showRegister.addEventListener("click", () => toggleAuthView("register"));
+      showLogin.addEventListener("click", () => toggleAuthView("login"));
 
       resetButton.addEventListener("click", async () => {
         const email =

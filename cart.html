@@ -340,27 +340,29 @@
             Proceed to checkout
           </button>
           <form class="checkout-form" id="checkoutForm">
-            <label>Name</label>
+            <label data-i18n="labelName">Name</label>
             <input type="text" id="shipName" required />
-            <label>Email</label>
+            <label data-i18n="labelEmail">Email</label>
             <input type="email" id="shipEmail" required />
-            <label>Phone</label>
+            <label data-i18n="labelPhone">Phone</label>
             <input type="tel" id="shipPhone" required />
-            <label>Address</label>
+            <label data-i18n="labelAddress">Address</label>
             <input type="text" id="shipAddress" required />
-            <label>City</label>
+            <label data-i18n="labelCity">City</label>
             <input type="text" id="shipCity" required />
-            <label>Country</label>
+            <label data-i18n="labelCountry">Country</label>
             <input type="text" id="shipCountry" required />
-            <label>Postal code</label>
+            <label data-i18n="labelPostal">Postal code</label>
             <input type="text" id="shipPostal" required />
-            <label>Card number</label>
+            <label data-i18n="labelCard">Card number</label>
             <input type="text" id="cardNumber" required />
-            <label>Expiry (MM/YY)</label>
+            <label data-i18n="labelExpiry">Expiry (MM/YY)</label>
             <input type="text" id="cardExpiry" required />
-            <label>CVC</label>
+            <label data-i18n="labelCvc">CVC</label>
             <input type="text" id="cardCvc" required />
-            <button class="checkout" type="submit">Place order</button>
+            <button class="checkout" type="submit" data-i18n="placeOrder">
+              Place order
+            </button>
           </form>
         </aside>
       </div>
@@ -382,6 +384,20 @@
           shipping: "Shipping",
           total: "Total",
           checkout: "Proceed to checkout",
+          labelName: "Name",
+          labelEmail: "Email",
+          labelPhone: "Phone",
+          labelAddress: "Address",
+          labelCity: "City",
+          labelCountry: "Country",
+          labelPostal: "Postal code",
+          labelCard: "Card number",
+          labelExpiry: "Expiry (MM/YY)",
+          labelCvc: "CVC",
+          placeOrder: "Place order",
+          sizeLabel: "Size",
+          colorLabel: "Color",
+          remove: "Remove",
         },
         ru: {
           brand: "Yokatta",
@@ -392,6 +408,20 @@
           shipping: "Доставка",
           total: "Итого",
           checkout: "Перейти к оплате",
+          labelName: "Имя",
+          labelEmail: "Email",
+          labelPhone: "Телефон",
+          labelAddress: "Адрес",
+          labelCity: "Город",
+          labelCountry: "Страна",
+          labelPostal: "Индекс",
+          labelCard: "Номер карты",
+          labelExpiry: "Срок (ММ/ГГ)",
+          labelCvc: "CVC",
+          placeOrder: "Оформить заказ",
+          sizeLabel: "Размер",
+          colorLabel: "Цвет",
+          remove: "Удалить",
         },
       };
 
@@ -406,6 +436,10 @@
         });
         localStorage.setItem("lang", lang);
       };
+
+      const t = (key) =>
+        (translations[localStorage.getItem("lang") || "en"] || translations.en)[key] ||
+        key;
 
       document.querySelectorAll(".lang button").forEach((btn) => {
         btn.addEventListener("click", () => applyLanguage(btn.dataset.lang));
@@ -450,14 +484,14 @@
               <div class="item-meta">
                 <div class="item-name">${item.name}</div>
                 <div class="item-row">
-                  <span>Size: ${item.size || "-"}</span>
-                  <span>Color: ${item.color || "-"}</span>
+                  <span>${t("sizeLabel")}: ${item.size || "-"}</span>
+                  <span>${t("colorLabel")}: ${item.color || "-"}</span>
                   <span>$${item.price || 0}</span>
                 </div>
                 <div class="qty">
                   <span>${item.quantity || 1}</span>
                 </div>
-                <button class="remove" data-id="${item.id}">Remove</button>
+                <button class="remove" data-id="${item.id}">${t("remove")}</button>
               </div>
             </div>
           `
@@ -481,6 +515,9 @@
         });
       };
 
+      const generateTracking = () =>
+        Math.random().toString(36).slice(2, 8).toUpperCase();
+
       document
         .getElementById("checkoutForm")
         .addEventListener("submit", async (event) => {
@@ -490,6 +527,7 @@
           if (!session || currentItems.length === 0) return;
           const cardNumber = document.getElementById("cardNumber").value.trim();
           const last4 = cardNumber.slice(-4);
+          const tracking = generateTracking();
           await supabaseClient.from("orders").insert({
             user_id: session.user.id,
             items: currentItems,
@@ -505,6 +543,8 @@
               city: document.getElementById("shipCity").value.trim(),
               country: document.getElementById("shipCountry").value.trim(),
               postal: document.getElementById("shipPostal").value.trim(),
+              status: "processing",
+              tracking,
             },
             card_last4: last4,
           });
