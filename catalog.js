@@ -172,7 +172,6 @@ const renderProducts = (products) => {
             ? ` style="background-image: url('${product.image}'); background-size: cover; background-position: center;"`
             : ""
         }>
-          ${product.image ? `<img src="${product.image}" alt="${product.name}" />` : ""}
           <a class="view-button" href="product.html?productId=${encodeURIComponent(
             product.id
           )}&img=${encodeURIComponent(product.image || "")}" data-id="${

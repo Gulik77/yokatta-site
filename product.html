@@ -719,6 +719,9 @@
             return parsed;
           }
         } catch (err) {}
+        if (imageParam) {
+          return { id: productId || "product-001", image: imageParam };
+        }
         return null;
       };
 
