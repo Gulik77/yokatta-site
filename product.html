@@ -694,6 +694,81 @@
       let images = ["bag.jpg", "denim.jpg", "hoodies.jpg"];
       let currentIndex = 0;
 
+      const productFallbacks = {
+        "tee-1": {
+          id: "tee-1",
+          name: "Oversized Tee",
+          price: 68,
+          color: "Black",
+          category: "T-shirts",
+          sizes: ["S", "M", "L", "XL"],
+          image: "oversize.jpg",
+        },
+        "tee-2": {
+          id: "tee-2",
+          name: "Classic Tee",
+          price: 55,
+          color: "White",
+          category: "T-shirts",
+          sizes: ["XS", "S", "M", "L"],
+          image: "classic.jpg",
+        },
+        "tee-3": {
+          id: "tee-3",
+          name: "Cropped Tee",
+          price: 49,
+          color: "Grey",
+          category: "T-shirts",
+          sizes: ["XS", "S", "M"],
+          image: "crop.jpg",
+        },
+        "tee-4": {
+          id: "tee-4",
+          name: "Rib Tee",
+          price: 60,
+          color: "Beige",
+          category: "T-shirts",
+          sizes: ["S", "M", "L"],
+          image: "reb.jpg",
+        },
+        "hood-1": {
+          id: "hood-1",
+          name: "Oversized Hoodie",
+          price: 150,
+          color: "Black",
+          category: "Hoodies",
+          sizes: ["M", "L", "XL"],
+          image: "1.jpg",
+        },
+        "hood-2": {
+          id: "hood-2",
+          name: "Classic Hoodie",
+          price: 130,
+          color: "Grey",
+          category: "Hoodies",
+          sizes: ["S", "M", "L"],
+          image: "2.jpg",
+        },
+        "hood-3": {
+          id: "hood-3",
+          name: "Cropped Hoodie",
+          price: 120,
+          color: "White",
+          category: "Hoodies",
+          sizes: ["S", "M"],
+          image: "3.jpg",
+        },
+        "hood-4": {
+          id: "hood-4",
+          name: "Zip Hoodie",
+          price: 140,
+          color: "Black",
+          category: "Hoodies",
+          sizes: ["S", "M", "L"],
+          image: "4.jpg",
+        },
+      };
+
       const loadProductFromStorage = () => {
         const params = new URLSearchParams(window.location.search);
         const productId = params.get("productId");
@@ -706,6 +781,9 @@
               const match = list.find((item) => item.id === productId);
               if (match) {
                 if (imageParam) match.image = imageParam;
+                if (!match.image && productFallbacks[productId]) {
+                  match.image = productFallbacks[productId].image;
+                }
                 return match;
               }
             }
@@ -715,10 +793,22 @@
           const selected = localStorage.getItem("selectedProduct");
           if (selected) {
             const parsed = JSON.parse(selected);
-            if (imageParam) parsed.image = imageParam;
-            return parsed;
+            if (parsed.id && productId && parsed.id !== productId) {
+              // Ignore stale selection from a different product
+            } else {
+              if (imageParam) parsed.image = imageParam;
+              if (!parsed.image && productId && productFallbacks[productId]) {
+                parsed.image = productFallbacks[productId].image;
+              }
+              return parsed;
+            }
           }
         } catch (err) {}
+        if (productId && productFallbacks[productId]) {
+          const fallback = { ...productFallbacks[productId] };
+          if (imageParam) fallback.image = imageParam;
+          return fallback;
+        }
         if (imageParam) {
           return { id: productId || "product-001", image: imageParam };
         }

@@ -151,6 +151,19 @@ const translateFilterOptions = (lang) => {
   });
 };
 
+const productImages = {
+  "tee-1": "oversize.jpg",
+  "tee-2": "classic.jpg",
+  "tee-3": "crop.jpg",
+  "tee-4": "reb.jpg",
+  "hood-1": "1.jpg",
+  "hood-2": "2.jpg",
+  "hood-3": "3.jpg",
+  "hood-4": "4.jpg",
+};
+
+const getProductImage = (product) => product.image || productImages[product.id] || "";
+
 const renderProducts = (products) => {
   const grid = document.getElementById("grid");
   if (!grid) return;
@@ -165,16 +178,19 @@ const renderProducts = (products) => {
   const viewLabel = viewLabels[getLang()] || viewLabels.en;
   grid.innerHTML = products
     .map(
-      (product) => `
+      (product) => {
+        const image = getProductImage(product);
+        const imageUrl = image ? `${image}?v=1` : "";
+        return `
       <div class="card" data-id="${product.id}">
         <div class="thumb"${
-          product.image
-            ? ` style="background-image: url('${product.image}'); background-size: cover; background-position: center;"`
+          imageUrl
+            ? ` style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;"`
             : ""
         }>
           <a class="view-button" href="product.html?productId=${encodeURIComponent(
             product.id
-          )}&img=${encodeURIComponent(product.image || "")}" data-id="${
+          )}&img=${encodeURIComponent(imageUrl)}" data-id="${
             product.id
           }">${viewLabel}</a>
         </div>
@@ -187,7 +203,8 @@ const renderProducts = (products) => {
           </button>
         </div>
       </div>
-    `
+    `;
+      }
     )
     .join("");
 
