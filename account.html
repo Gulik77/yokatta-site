@@ -504,7 +504,7 @@
           </button>
         </form>
 
-        <form class="card hidden" id="registerForm" hidden>
+        <form class="card hidden" id="registerForm" hidden style="display: none;">
           <h2 data-i18n="registerTitle">Registration</h2>
           <label data-i18n="emailLabel" for="reg-email">Email</label>
           <input id="reg-email" type="email" required />
@@ -680,6 +680,14 @@
       const resetButton = document.getElementById("resetButton");
       const resetEmail = document.getElementById("reset-email");
 
+      // Force initial state: show login only
+      registerForm.hidden = true;
+      registerForm.classList.add("hidden");
+      registerForm.style.display = "none";
+      loginForm.hidden = false;
+      loginForm.classList.remove("hidden");
+      loginForm.style.display = "grid";
+
       const t = (key) =>
         (translations[currentLang] && translations[currentLang][key]) ||
         translations.en[key] ||
@@ -702,6 +710,8 @@
             !ADMIN_EMAIL || session.user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase();
           loginForm.classList.add("hidden");
           registerForm.classList.add("hidden");
+          loginForm.style.display = "none";
+          registerForm.style.display = "none";
           loadOrders(session.user.id);
         } else {
           authGrid.hidden = false;
@@ -713,6 +723,8 @@
           registerForm.hidden = true;
           loginForm.classList.remove("hidden");
           registerForm.classList.add("hidden");
+          loginForm.style.display = "grid";
+          registerForm.style.display = "none";
         }
       };
 
@@ -811,11 +823,15 @@
           registerForm.hidden = false;
           loginForm.classList.add("hidden");
           registerForm.classList.remove("hidden");
+          loginForm.style.display = "none";
+          registerForm.style.display = "grid";
         } else {
           loginForm.hidden = false;
           registerForm.hidden = true;
           loginForm.classList.remove("hidden");
           registerForm.classList.add("hidden");
+          loginForm.style.display = "grid";
+          registerForm.style.display = "none";
         }
       };
 

@@ -44,6 +44,48 @@ const applyFiltersToProducts = (products, filters) =>
   });
 
 const getLang = () => localStorage.getItem("lang") || "en";
+const toastMessages = {
+  en: {
+    login: "Please login to continue",
+    added: "Added to wishlist",
+  },
+  ru: {
+    login: "Войдите в аккаунт",
+    added: "Добавлено в избранное",
+  },
+};
+
+const showToast = (key) => {
+  const lang = getLang();
+  let toast = document.getElementById("toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toast";
+    toast.style.position = "fixed";
+    toast.style.left = "50%";
+    toast.style.bottom = "24px";
+    toast.style.transform = "translateX(-50%)";
+    toast.style.padding = "10px 16px";
+    toast.style.borderRadius = "999px";
+    toast.style.border = "1px solid rgba(255, 255, 255, 0.2)";
+    toast.style.background = "rgba(0, 0, 0, 0.7)";
+    toast.style.color = "var(--text-color, #f8f3ef)";
+    toast.style.fontSize = "12px";
+    toast.style.letterSpacing = "0.14em";
+    toast.style.textTransform = "uppercase";
+    toast.style.zIndex = "10";
+    toast.style.opacity = "0";
+    toast.style.transition = "opacity 0.2s ease";
+    toast.style.pointerEvents = "none";
+    document.body.appendChild(toast);
+  }
+  toast.textContent = toastMessages[lang]?.[key] || toastMessages.en[key] || key;
+  toast.style.opacity = "1";
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => {
+    toast.style.opacity = "0";
+  }, 2000);
+};
 const viewLabels = { en: "View", ru: "Смотреть" };
 const filterLabels = {
   en: {
@@ -149,7 +191,7 @@ const renderProducts = (products) => {
       const { data } = await supabaseClient.auth.getSession();
       const session = data.session;
       if (!session) {
-        alert("Please login to add to wishlist.");
+        showToast("login");
         return;
       }
       const productId = btn.dataset.id;
@@ -165,7 +207,7 @@ const renderProducts = (products) => {
         model: item.model,
         category: item.category,
       });
-      alert("Added to wishlist.");
+      showToast("added");
     });
   });
 

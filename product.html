@@ -438,6 +438,29 @@
         text-transform: uppercase;
       }
 
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(-50%);
+        padding: 10px 16px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.7);
+        color: var(--text-color, #f8f3ef);
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        pointer-events: none;
+      }
+
+      .toast.show {
+        opacity: 1;
+      }
+
       @media (max-width: 900px) {
         .product {
           grid-template-columns: 1fr;
@@ -563,6 +586,8 @@
       </section>
     </div>
 
+    <div class="toast" id="toast"></div>
+
     <footer class="footer">
       <div class="footer-inner">
         <div class="footer-brand">Yokatta</div>
@@ -587,6 +612,10 @@
           color: "Color: Black",
           similar: "Similar products",
           view: "View",
+          toastLogin: "Please login to continue",
+          toastWishlist: "Added to wishlist",
+          toastCart: "Added to cart",
+          toastSize: "Select size first",
           accDescription: "Description",
           accDescriptionText: "Minimal premium description placeholder for the item.",
           accFit: "Fit",
@@ -605,6 +634,10 @@
           color: "Цвет: Чёрный",
           similar: "Похожие товары",
           view: "Смотреть",
+          toastLogin: "Войдите в аккаунт",
+          toastWishlist: "Добавлено в избранное",
+          toastCart: "Добавлено в корзину",
+          toastSize: "Выберите размер",
           accDescription: "Описание",
           accDescriptionText: "Минималистичное описание премиального изделия.",
           accFit: "Посадка",
@@ -631,6 +664,18 @@
         });
         localStorage.setItem("lang", lang);
         updateProductUI();
+      };
+
+      const toast = document.getElementById("toast");
+      let toastTimer;
+      const showToast = (key) => {
+        if (!toast) return;
+        toast.textContent = translations[currentLang]?.[key] || translations.en[key] || key;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 2000);
       };
 
       document.querySelectorAll(".lang button").forEach((btn) => {
@@ -739,11 +784,15 @@
         const { data } = await supabaseClient.auth.getSession();
         const session = data.session;
         if (!session) {
-          alert("Please login to add to cart.");
+          showToast("toastLogin");
           return;
         }
         const selected = document.querySelector(".size.active");
         const size = selected ? selected.dataset.size : null;
+        if (!size) {
+          showToast("toastSize");
+          return;
+        }
         await supabaseClient.from("cart_items").insert({
           user_id: session.user.id,
           product_id: productData.id,
@@ -754,14 +803,14 @@
           category: productData.category,
           quantity: 1,
         });
-        alert("Added to cart.");
+        showToast("toastCart");
       });
 
       wishButton.addEventListener("click", async () => {
         const { data } = await supabaseClient.auth.getSession();
         const session = data.session;
         if (!session) {
-          alert("Please login to add to wishlist.");
+          showToast("toastLogin");
           return;
         }
         await supabaseClient.from("wishlist_items").insert({
@@ -772,7 +821,7 @@
           color: productData.color,
           category: productData.category,
         });
-        alert("Added to wishlist.");
+        showToast("toastWishlist");
       });
 
       document.querySelectorAll(".accordion-toggle").forEach((toggle) => {
