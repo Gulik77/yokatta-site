@@ -168,6 +168,7 @@ const renderProducts = (products) => {
       (product) => `
       <div class="card" data-id="${product.id}">
         <div class="thumb">
+          ${product.image ? `<img src="${product.image}" alt="${product.name}" />` : ""}
           <a class="view-button" href="product.html?productId=${encodeURIComponent(
             product.id
           )}" data-id="${product.id}">${viewLabel}</a>
