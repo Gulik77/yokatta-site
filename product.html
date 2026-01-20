@@ -752,7 +752,10 @@
         });
         addToCart.classList.remove("enabled");
 
-        images = categoryImages[productData.category] || images;
+        images =
+          productData.image
+            ? [productData.image]
+            : categoryImages[productData.category] || images;
         currentIndex = 0;
         if (galleryImage) galleryImage.src = images[currentIndex];
       };
