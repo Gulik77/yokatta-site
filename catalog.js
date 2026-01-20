@@ -167,7 +167,11 @@ const renderProducts = (products) => {
     .map(
       (product) => `
       <div class="card" data-id="${product.id}">
-        <div class="thumb">
+        <div class="thumb"${
+          product.image
+            ? ` style="background-image: url('${product.image}'); background-size: cover; background-position: center;"`
+            : ""
+        }>
           ${product.image ? `<img src="${product.image}" alt="${product.name}" />` : ""}
           <a class="view-button" href="product.html?productId=${encodeURIComponent(
             product.id
