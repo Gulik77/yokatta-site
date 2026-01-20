@@ -697,19 +697,27 @@
       const loadProductFromStorage = () => {
         const params = new URLSearchParams(window.location.search);
         const productId = params.get("productId");
+        const imageParam = params.get("img");
         if (productId) {
           try {
             const catalogRaw = localStorage.getItem("catalogProducts");
             if (catalogRaw) {
               const list = JSON.parse(catalogRaw);
               const match = list.find((item) => item.id === productId);
-              if (match) return match;
+              if (match) {
+                if (imageParam) match.image = imageParam;
+                return match;
+              }
             }
           } catch (err) {}
         }
         try {
           const selected = localStorage.getItem("selectedProduct");
-          if (selected) return JSON.parse(selected);
+          if (selected) {
+            const parsed = JSON.parse(selected);
+            if (imageParam) parsed.image = imageParam;
+            return parsed;
+          }
         } catch (err) {}
         return null;
       };

@@ -171,7 +171,9 @@ const renderProducts = (products) => {
           ${product.image ? `<img src="${product.image}" alt="${product.name}" />` : ""}
           <a class="view-button" href="product.html?productId=${encodeURIComponent(
             product.id
-          )}" data-id="${product.id}">${viewLabel}</a>
+          )}&img=${encodeURIComponent(product.image || "")}" data-id="${
+            product.id
+          }">${viewLabel}</a>
         </div>
         <div class="card-title">${product.name}</div>
         <div class="card-price">$${product.price}</div>
