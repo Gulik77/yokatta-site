@@ -422,6 +422,7 @@
       }
 
       .category-rect {
+        display: block;
         width: 100%;
         height: clamp(260px, 32vw, 380px);
         border-radius: 4px;
@@ -438,6 +439,7 @@
           background 0.2s ease,
           opacity 0.6s ease;
         overflow: hidden;
+        text-decoration: none;
       }
 
       .category-rect.left {
@@ -911,9 +913,8 @@
           <a href="t-shirts.html" data-i18n="catTees">T-shirts</a>
           <a href="hoodies.html" data-i18n="catHoodies">Hoodies</a>
           <a href="jeans.html" data-i18n="catJeans">Jeans</a>
-          <a href="shorts.html" data-i18n="catShorts">Shorts</a>
-          <a href="outerwear.html" data-i18n="catOuterwear">Outerwear</a>
-          <a href="accessories.html" data-i18n="catAccessories">Accessories</a>
+          <a href="heels.html" data-i18n="catHeels">Heels</a>
+          <a href="bags.html" data-i18n="catBags">Bags</a>
         </div>
         <a class="drawer-item" href="cart.html" data-i18n="navCart">
           Bag / Cart
@@ -973,21 +974,21 @@
       <div class="block-label" data-i18n="blockNow">SS26 OUT NOW</div>
       <div class="categories" id="categories">
         <div class="category-card">
-          <div class="category-rect left">
-            <img src="tshirts.jpg" alt="T-Shorts" />
-          </div>
-          <div class="category-label" data-i18n="catLabelTees">T-SHORTS</div>
+          <a class="category-rect left" href="product.html?productId=tee-1&img=oversize.jpg">
+            <img src="oversize.jpg" alt="T-shirts" />
+          </a>
+          <div class="category-label" data-i18n="catLabelTees">T-SHIRTS</div>
         </div>
         <div class="category-card">
-          <div class="category-rect middle">
-            <img src="hoodies.jpg" alt="Hoodies" />
-          </div>
+          <a class="category-rect middle" href="product.html?productId=hood-1&img=1.jpg">
+            <img src="1.jpg" alt="Hoodies" />
+          </a>
           <div class="category-label" data-i18n="catLabelHoodies">HOODIES</div>
         </div>
         <div class="category-card">
-          <div class="category-rect right">
-            <img src="denim.jpg" alt="Denim" />
-          </div>
+          <a class="category-rect right" href="product.html?productId=jean-1&img=mom.jpg">
+            <img src="mom.jpg" alt="Denim" />
+          </a>
           <div class="category-label" data-i18n="catLabelDenim">DENIM</div>
         </div>
       </div>
@@ -1230,9 +1231,8 @@
           catTees: "T-shirts",
           catHoodies: "Hoodies",
           catJeans: "Jeans",
-          catShorts: "Shorts",
-          catOuterwear: "Outerwear",
-          catAccessories: "Accessories",
+          catHeels: "Heels",
+          catBags: "Bags",
           navCart: "Bag / Cart",
           navAccount: "Account / Profile",
           navWishlist: "Wishlist / Favorites",
@@ -1272,9 +1272,8 @@
           catTees: "Футболки",
           catHoodies: "Худи",
           catJeans: "Джинсы",
-          catShorts: "Шорты",
-          catOuterwear: "Верхняя одежда",
-          catAccessories: "Аксессуары",
+          catHeels: "Каблуки",
+          catBags: "Сумки",
           navCart: "Корзина",
           navAccount: "Аккаунт",
           navWishlist: "Избранное",

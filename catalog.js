@@ -160,6 +160,10 @@ const productImages = {
   "hood-2": "2.jpg",
   "hood-3": "3.jpg",
   "hood-4": "4.jpg",
+  "jean-2": "baggy.jpg",
+  "jean-1": "mom.jpg",
+  "jean-3": "skinny.jpg",
+  "jean-4": "str.jpg",
 };
 
 const getProductImage = (product) => product.image || productImages[product.id] || "";
@@ -167,7 +171,8 @@ const getProductImage = (product) => product.image || productImages[product.id] 
 const renderProducts = (products) => {
   const grid = document.getElementById("grid");
   if (!grid) return;
-  if (!products.length) {
+  let items = products;
+  if (!items.length) {
     const emptyState = document.getElementById("emptyState");
     if (emptyState) emptyState.hidden = false;
     grid.innerHTML = "";
@@ -176,7 +181,7 @@ const renderProducts = (products) => {
   const emptyState = document.getElementById("emptyState");
   if (emptyState) emptyState.hidden = true;
   const viewLabel = viewLabels[getLang()] || viewLabels.en;
-  grid.innerHTML = products
+  grid.innerHTML = items
     .map(
       (product) => {
         const image = getProductImage(product);

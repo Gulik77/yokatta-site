@@ -553,36 +553,7 @@
 
       <section class="similar">
         <h2 class="similar-title" data-i18n="similar">Similar products</h2>
-        <div class="grid">
-          <a class="card" href="product.html">
-            <div class="thumb">
-              <span class="view-button" data-i18n="view">View</span>
-            </div>
-            <div class="card-title">Product</div>
-            <div class="card-price">$0</div>
-          </a>
-          <a class="card" href="product.html">
-            <div class="thumb">
-              <span class="view-button" data-i18n="view">View</span>
-            </div>
-            <div class="card-title">Product</div>
-            <div class="card-price">$0</div>
-          </a>
-          <a class="card" href="product.html">
-            <div class="thumb">
-              <span class="view-button" data-i18n="view">View</span>
-            </div>
-            <div class="card-title">Product</div>
-            <div class="card-price">$0</div>
-          </a>
-          <a class="card" href="product.html">
-            <div class="thumb">
-              <span class="view-button" data-i18n="view">View</span>
-            </div>
-            <div class="card-title">Product</div>
-            <div class="card-price">$0</div>
-          </a>
-        </div>
+        <div class="grid" id="similarGrid"></div>
       </section>
     </div>
 
@@ -685,6 +656,7 @@
       document.getElementById("backButton").addEventListener("click", () => history.back());
 
       const galleryImage = document.getElementById("galleryImage");
+      const similarGrid = document.getElementById("similarGrid");
       const titleEl = document.querySelector(".title");
       const priceEl = document.querySelector(".price");
       const colorEl = document.querySelector(".color");
@@ -767,6 +739,102 @@
           sizes: ["S", "M", "L"],
           image: "4.jpg",
         },
+        "jean-1": {
+          id: "jean-1",
+          name: "Mom Jeans",
+          price: 120,
+          color: "Blue",
+          category: "Jeans",
+          sizes: ["XS", "S", "M"],
+          image: "mom.jpg",
+        },
+        "jean-2": {
+          id: "jean-2",
+          name: "Baggy Jeans",
+          price: 135,
+          color: "Blue",
+          category: "Jeans",
+          sizes: ["S", "M", "L"],
+          image: "baggy.jpg",
+        },
+        "jean-3": {
+          id: "jean-3",
+          name: "Skinny Jeans",
+          price: 110,
+          color: "Black",
+          category: "Jeans",
+          sizes: ["XS", "S", "M"],
+          image: "skinny.jpg",
+        },
+        "jean-4": {
+          id: "jean-4",
+          name: "Straight Jeans",
+          price: 125,
+          color: "Grey",
+          category: "Jeans",
+          sizes: ["S", "M", "L"],
+          image: "str.jpg",
+        },
+      };
+
+      const getCatalogProducts = () => {
+        try {
+          const catalogRaw = localStorage.getItem("catalogProducts");
+          if (catalogRaw) {
+            const list = JSON.parse(catalogRaw);
+            if (Array.isArray(list) && list.length) return list;
+          }
+        } catch (err) {}
+        return Object.values(productFallbacks);
+      };
+
+      const getProductImage = (item) => {
+        if (item.image) return item.image;
+        if (productFallbacks[item.id]?.image) return productFallbacks[item.id].image;
+        return "";
+      };
+
+      const renderSimilarProducts = () => {
+        if (!similarGrid) return;
+        const products = getCatalogProducts();
+        const sameCategory = products.filter(
+          (item) =>
+            item.category === productData.category && item.id !== productData.id
+        );
+        const seenImages = new Set();
+        const uniqueItems = sameCategory.filter((item) => {
+          const image = getProductImage(item);
+          const key = image ? image.toLowerCase() : "__no_image__";
+          if (seenImages.has(key)) return false;
+          seenImages.add(key);
+          return true;
+        });
+        if (!sameCategory.length) {
+          similarGrid.innerHTML = "";
+          return;
+        }
+        const viewLabel = translations[currentLang]?.view || translations.en.view;
+        similarGrid.innerHTML = uniqueItems
+          .slice(0, 4)
+          .map((item) => {
+            const image = getProductImage(item);
+            const imageUrl = image ? `${image}?v=1` : "";
+            const thumbStyle = imageUrl
+              ? ` style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;"`
+              : "";
+            return `
+            <a class="card" href="product.html?productId=${encodeURIComponent(
+              item.id
+            )}&img=${encodeURIComponent(imageUrl)}">
+              <div class="thumb"${thumbStyle}>
+                <span class="view-button">${viewLabel}</span>
+              </div>
+              <div class="card-title">${item.name}</div>
+              <div class="card-price">$${item.price}</div>
+            </a>
+          `;
+          })
+          .join("");
       };
 
       const loadProductFromStorage = () => {
@@ -859,6 +927,7 @@
             : categoryImages[productData.category] || images;
         currentIndex = 0;
         if (galleryImage) galleryImage.src = images[currentIndex];
+        renderSimilarProducts();
       };
 
       const bindSizeButtons = () => {
